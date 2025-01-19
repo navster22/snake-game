@@ -69,7 +69,8 @@ function moveSnake() {
     if(head.x < 0 || head.y < 0 || head.x >= boardSize || head.y >= boardSize ||
        snake.some(segment => segment.x === head.x && segment.y === head.y) 
     ) {
-        gameActive = flase;
+        clearInterval(interval);
+        gameActive = false;
         overlay.classList.toggle('hidden');
         controls.classList.toggle('active');
         gameOverMessgae.textContent = 'Game Over';
@@ -91,6 +92,19 @@ function moveSnake() {
     createSnake();
 }
 
+function changeDirection(newDirection) {
+    if(
+        (newDirection === 'ArrowUp' && direction !== 'ArrowDown') || 
+        (newDirection === 'ArrowDown' && direction !== 'ArrowUp') || 
+        (newDirection === 'ArrowLeft' && direction !== 'ArrowRight') || 
+        (newDirection === 'ArrowRight' && direction !== 'ArrowLeft')
+    ){
+        direction = newDirection;
+    }
+}
+
+window.addEventListener('keydown', (e) => changeDirection(e.key))
+
 function startGame() {
     snake = [{x: 100, y: 100}];
     direction = 'ArrowRight';
@@ -102,6 +116,6 @@ function startGame() {
     controls.classList.toggle('active');
     gameOverMessgae.textContent = '';
     playButton.textContent = "Play";
-    // clearInterval(interval);
-    // interval = setInterval(moveSnake, 400)
+    clearInterval(interval);
+    interval = setInterval(moveSnake, 400)
 }
