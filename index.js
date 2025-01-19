@@ -53,19 +53,43 @@ function moveSnake() {
 
     switch (direction) {
         case 'ArrowUp':
-
+            head.y -=blockSize; 
             break;
-        case 'ArrowDoen':
-
+        case 'ArrowDown':
+            head.y +=blockSize; 
             break;
+        case 'ArrowLeft':
+            head.x -=blockSize; 
+            break;
+        case 'ArrowRight':
+            head.x +=blockSize; 
+            break;    
+    }
 
-        case 'ArrowUp':
+    if(head.x < 0 || head.y < 0 || head.x >= boardSize || head.y >= boardSize ||
+       snake.some(segment => segment.x === head.x && segment.y === head.y) 
+    ) {
+        gameActive = flase;
+        overlay.classList.toggle('hidden');
+        controls.classList.toggle('active');
+        gameOverMessgae.textContent = 'Game Over';
+        playButton.textContent = "Restart";
+        return;
+    }
 
-            break;        }
+    snake.unshift(head);
 
-        case 'ArrowUp':
+    if(head.x === food.x && head.y === food.y) {
+        score += 10;
+        scoreElement.textContent = `Score: ${score}`;
+        food = generateFood();
+    } else {
+        snake.pop();
+    }
 
-            break;        }
+    createFood();
+    createSnake();
+}
 
 function startGame() {
     snake = [{x: 100, y: 100}];
